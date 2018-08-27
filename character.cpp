@@ -1,9 +1,12 @@
-#include "race.h"
-
+//XXX fix preprocessor directives throughout files
+#include <iostream>
+#include <cstring>
+#include "character.h"
+using namespace std;
 
 
 //Constructor
-Race::Race()
+Character::Character()
 {
     srand(time(NULL));
 
@@ -18,64 +21,82 @@ Race::Race()
     slate.armor = 0;
     slate.damage = 0;
 
-    role = NULL;
     roleName = NULL;
 }
 
 //Destructor
-Race::~Race()
+Character::~Character()
 {
-    if(role)
-    {
-        delete role;
-        role = NULL;
-    }
     if(roleName)
     {
-        delete roleName;
+        delete [] roleName;
         roleName = NULL;
     }
 }
 
-int Race::new_profession()
+
+//Task:
+int Character::characterCreation()
 {
-    int choice = 0;
+    assignRole();
+    initAttributes();
+    display();
 
-    cout << "\n****Profession Selection*****" << endl;
-    cout << "1) Warrior " << endl;
-    cout << "2) Mage " << endl;
-    cout << "3) Archer " << endl;
-
-    cout << "\nNow please choose your profession: ";
-    cin >> choice;
-    cin.ignore(100, '\n');
-
-    switch(choice)
-    {
-        case 1: 
-            role = new Warrior;
-            roleName = new char[8];
-            strcpy(roleName, "Warrior");
-            break;
-
-        case 2:
-            role = new Mage;
-            roleName = new char[5];
-            strcpy(roleName, "Mage");
-            break;
-
-        case 3:
-            role = new Archer;
-            roleName = new char[7];
-            strcpy(roleName, "Archer");
-            break;
-    }
-
-    return choice;
+    return 0;
 }
 
 
-int Race::assignValues(int choice)
+int Character::assignRole()
+{
+    char name[10];
+    int choice = 0;
+    int length = 0;
+
+    do
+    {
+        cout << "\nPlease select your Role:" << endl;
+        cout << "1) Warrior" << endl;
+        cout << "2) Wizard" << endl;
+        cout << "3) Archer" << endl;
+
+        cin >> choice;
+        cin.ignore(100, '\n');
+
+        if(choice == 1)
+        {
+            strcpy(name, "Warrior");
+        }
+        else if(choice == 2)
+        {
+            strcpy(name, "Wizard");
+        }
+        else if(choice == 3)
+        {
+            strcpy(name, "Archer");
+        }
+        else
+        {
+            cout << "Please select the appropriate number" << endl;
+        }
+    }while(choice < 1 || choice > 3);
+
+    //make sure to deallocate memory before moving pointer.
+    if(roleName)
+    {
+        delete [] roleName;
+        roleName = NULL;
+    }
+
+    length = strlen(name);
+    roleName = new char[length+1];
+    strcpy(roleName, name);
+
+    return 0;
+}
+
+
+
+int Character::initAttributes()
 {
     int values[6];
     int sum;
@@ -103,7 +124,7 @@ int Race::assignValues(int choice)
     }
 
     //Warrior Choice
-    if(choice == 1)
+    if(strcmp(roleName, "Warrior") == 0)
     {
         stats.strength = values[0];
         stats.vitality = values[1];
@@ -113,7 +134,7 @@ int Race::assignValues(int choice)
         stats.intelligence = values[5];
     }
     //Mage Choice
-    if(choice == 2)
+    else if(strcmp(roleName, "Wizard") == 0)
     {
         stats.intelligence = values[0];
         stats.wisdom = values[1];
@@ -123,7 +144,7 @@ int Race::assignValues(int choice)
         stats.strength = values[5];
     }
     //Archer Choice
-    if(choice == 3)
+    else if(strcmp(roleName, "Archer") == 0)
     {
         stats.dexterity = values[0];
         stats.vitality = values[1];
@@ -132,19 +153,17 @@ int Race::assignValues(int choice)
         stats.intelligence = values[4];
         stats.wisdom = values[5];
     }
+    else
+        cout << "Can't recognize Role" << endl;
 
     return 0;
 }
 
 
-void Race::displayRole()
+void Character::display()
 {
-    cout << "Role: " << roleName << endl;
-}
-
-void Race::displayStats()
-{
-    cout << "\n\n********Stats*******" << endl;
+    cout << "\nRole: " << roleName << endl;
+    cout << "\n********Stats*******" << endl;
     cout << "Strength: " << stats.strength << endl;
     cout << "Dexterity: " << stats.dexterity << endl;
     cout << "Vitality: " << stats.vitality << endl;
@@ -152,22 +171,3 @@ void Race::displayStats()
     cout << "Wisdom: " << stats.wisdom << endl;
     cout << "Charisma: " << stats.charisma << endl;
 }
-
-
-//Constructor
-Human::Human() {}
-
-//Destructor
-Human::~Human() {}
-
-//Constructor
-Elf::Elf() {}
-
-//Destructor
-Elf::~Elf() {}
-
-//Constructor
-Orc::Orc() {}
-
-//Destructor
-Orc::~Orc() {}

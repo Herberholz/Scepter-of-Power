@@ -1,6 +1,2 @@
 ---To Do List---
 
-1)Need to include display of race/role. Getting garbage/address so need to create
-  data members to hold what is created so i can make functions to display the data.
-
-

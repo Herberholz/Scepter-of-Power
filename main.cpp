@@ -1,30 +1,41 @@
+//Scepter of Power
+//Algorithm
+//1. Intro displays and user is allowed to choose whether to start new game, 
+//   load previous game, or quit.
+//2. If new game is selected then new character is created.
+//3. If load is selected then display all possible save files.
+//4. If quit is chosen then exit game.
+//End Algorithm
+
 #include "game.h"
 
 
 int main()
 {
-    Operation game;
+    Game rpg;
     int choice = 0;
 
     do
     {
-        choice = game.start_menu();
+        choice = rpg.startMenu();
 
         switch(choice)
         {
+            //New Game
             case 1:
-                //create character here
-                game.character_creation();
+                rpg.newGame();
                 break;
+            //Load character and continue game
             case 2:
-                //load character and continue game
-                game.load();
+                if(rpg.load() == 0)
+                    cout << "No Saved Files" << endl;
                 break;
+            //Quit
             case 3:
                 cout << "\nGoodbye!" << endl;
                 break;
             default:
-                cout << "Error" << endl;
+                cout << "Invalid Main Menu Selection" << endl;
         }
 
     }while(choice != 3);
